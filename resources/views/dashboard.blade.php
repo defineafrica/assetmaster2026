@@ -31,10 +31,10 @@
     <div class="col-lg-4 col-xs-12">
         <a href="{{ route('hardware.index') }}">
             <!-- small hardware box -->
-            <div class="dashboard small-box" style="background-color: #ffffff; border: 2px solid #6610f2; border-radius: 8px;">
+            <div class="dashboard small-box" style="background-color: #ffffff; border: 2px solid #6610f2; border-radius: 8px; color:blue !important;">
                 <div class="inner">
-                   <h3 style="color: #6610f2;">{{ number_format(\App\Models\Asset::AssetsForShow()->count()) }}</h3>
-                    <p >{{ trans('general.assets') }}</p>
+                   <h3 style="color: #6610f2 !important;">{{ number_format(\App\Models\Asset::AssetsForShow()->count()) }}</h3>
+<p style="color: #6610f2 !important;">{{ trans('general.assets') }}</p>
                 </div>
                 <div class="icon" aria-hidden="true" style="color: #6610f2;">
                     <x-icon type="barcode" />
@@ -52,8 +52,8 @@
             <!-- small license box -->
             <div class="dashboard small-box" style="background-color: #ffffff; border: 2px solid #28a745; border-radius: 8px;">
                 <div class="inner">
-                    <h3 style="color: #28a745;">{{ number_format($counts['license']) }}</h3>
-                    <p style="color: #333333;">{{ trans('general.licenses') }}</p>
+                    <h3 style="color: #28a745 !important;">{{ number_format($counts['license']) }}</h3>
+                    <p style="color: #333333 !important;">{{ trans('general.licenses') }}</p>
                 </div>
                 <div class="icon" aria-hidden="true" style="color: #28a745;">
                     <x-icon type="key" />
@@ -72,8 +72,8 @@
         <a href="{{ route('accessories.index') }}">
             <div class="dashboard small-box" style="background-color: #ffffff; border: 2px solid #e83e8c; border-radius: 8px;">
                 <div class="inner">
-                    <h3 style="color: #e83e8c;">{{ number_format($counts['accessory']) }}</h3>
-                    <p style="color: #333333;">{{ trans('general.accessories') }}</p>
+                    <h3 style="color: #e83e8c !important;">{{ number_format($counts['accessory']) }}</h3>
+                    <p style="color: #333333 !important;">{{ trans('general.accessories') }}</p>
                 </div>
                 <div class="icon" aria-hidden="true" style="color: #e83e8c;">
                     <x-icon type="accessories" />
@@ -95,8 +95,8 @@
         <a href="{{ route('consumables.index') }}">
             <div class="dashboard small-box" style="background-color: #ffffff; border: 2px solid #ffc107; border-radius: 8px;">
                 <div class="inner">
-                    <h3 style="color: #d39e00;">{{ number_format($counts['consumable']) }}</h3>
-                    <p style="color: #333333;">{{ trans('general.consumables') }}</p>
+                    <h3 style="color: #d39e00 !important;">{{ number_format($counts['consumable']) }}</h3>
+                    <p style="color: #333333 !important;">{{ trans('general.consumables') }}</p>
                 </div>
                 <div class="icon" aria-hidden="true" style="color: #ffc107;">
                     <x-icon type="consumables" />
@@ -114,8 +114,8 @@
         <a href="{{ route('components.index') }}">
             <div class="dashboard small-box" style="background-color: #ffffff; border: 2px solid #dc3545; border-radius: 8px;">
                 <div class="inner">
-                    <h3 style="color: #dc3545;">{{ number_format($counts['component']) }}</h3>
-                    <p style="color: #333333;">{{ trans('general.components') }}</p>
+                    <h3 style="color: #dc3545 !important;">{{ number_format($counts['component']) }}</h3>
+                    <p style="color: #333333 !important;">{{ trans('general.components') }}</p>
                 </div>
                 <div class="icon" aria-hidden="true" style="color: #dc3545;">
                     <x-icon type="components" />
@@ -133,8 +133,8 @@
         <a href="{{ route('users.index') }}">
             <div class="dashboard small-box" style="background-color: #ffffff; border: 2px solid #17a2b8; border-radius: 8px;">
                 <div class="inner">
-                    <h3 style="color: #17a2b8;">{{ number_format($counts['user']) }}</h3>
-                    <p style="color: #333333;">{{ trans('general.people') }}</p>
+                    <h3 style="color: #17a2b8 !important;">{{ number_format($counts['user']) }}</h3>
+                    <p style="color: #333333 !important;">{{ trans('general.people') }}</p>
                 </div>
                 <div class="icon" aria-hidden="true" style="color: #17a2b8;">
                     <x-icon type="users" />

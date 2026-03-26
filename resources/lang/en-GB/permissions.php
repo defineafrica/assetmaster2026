@@ -371,6 +371,22 @@ return array(
     'companiesdelete' => [
         'name' => 'Delete Companies',
     ],
+    'donors'   => [
+        'name' => 'Donors',
+        'note'       => 'Grants access to the Donors section of the application.',
+    ],
+    'donorsview' => [
+        'name' => 'View Donors',
+    ],
+    'donorscreate' => [
+        'name' => 'Create New Donors',
+    ],
+    'donorsedit' => [
+        'name' => 'Edit Donors',
+    ],
+    'donorsdelete' => [
+        'name' => 'Delete Donors',
+    ],
     'user-self-accounts' => [
         'name' => 'User Self Accounts',
         'note'       => 'Grants non-admin users the ability to manage certain aspects of their own user accounts.',

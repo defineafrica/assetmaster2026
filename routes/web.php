@@ -11,6 +11,7 @@ use App\Http\Controllers\BulkManufacturersController;
 use App\Http\Controllers\BulkSuppliersController;
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\CompaniesController;
+use App\Http\Controllers\DonorsController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartmentsController;
 use App\Http\Controllers\DepreciationsController;
@@ -40,6 +41,13 @@ Route::group(['middleware' => 'auth'], function () {
     */
     Route::resource('companies', CompaniesController::class, [
         'parameters' => ['company' => 'company_id'],
+    ]);
+
+    /*
+    * Donors
+    */
+    Route::resource('donors', DonorsController::class, [
+        'parameters' => ['donor' => 'donor_id'],
     ]);
 
     /*

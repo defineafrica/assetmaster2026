@@ -152,6 +152,15 @@ class SettingsServiceProvider extends ServiceProvider
             return 'companies/';
         });
 
+        // Donor paths and URLs
+        app()->singleton('donors_upload_path', function () {
+            return 'donors/';
+        });
+
+        app()->singleton('donors_upload_url', function () {
+            return 'donors/';
+        });
+
         // Accessories paths and URLs
         app()->singleton('accessories_upload_path', function () {
             return 'accessories/';

@@ -85,6 +85,7 @@ return [
     'click_here'			=> 'Click here',
     'clear_selection'		=> 'Clear Selection',
     'companies'			    => 'Companies',
+    'donors'                  => 'Donors',
     'company'				=> 'Company',
     'component'			    => 'Component',
     'components'			=> 'Components',
