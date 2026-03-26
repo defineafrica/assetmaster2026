@@ -1605,6 +1605,14 @@
                                         </li>
                                     @endcan
 
+                                    @can('view', \App\Models\Donor::class)
+                                        <li {{!! (request()->is('donors*') ? ' class="active"' : '') !!}}>
+                                            <a href="{{ route('donors.index') }}">
+                                                {{ trans('general.donors') }}
+                                            </a>
+                                        </li>
+                                    @endcan
+
                                     @can('view', \App\Models\Depreciation::class)
                                         <li  {{!! (request()->is('depreciations*') ? ' class="active"' : '') !!}}>
                                             <a href="{{ route('depreciations.index') }}">

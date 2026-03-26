@@ -25,6 +25,8 @@ return [
 
     'companies'     => 'Companies can be used as a simple identifier field, or can be used to limit visibility of assets, users, etc if full company support is enabled in your Admin settings.',
 
+    'donors'        => 'Donors can be used as a simple identifier field, or can be used to limit visibility of assets, users, etc if full donor support is enabled in your Admin settings.',
+
     'components'    => 'Components are items that are part of an asset, for example HDD, RAM, etc.',
 
     'consumables'   => 'Consumables are anything purchased that will be used up over time. For example, printer ink or copier paper.',

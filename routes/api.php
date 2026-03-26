@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api;
+use App\Http\Controllers\Api\DonorsController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -191,6 +192,34 @@ Route::group(['prefix' => 'v1', 'middleware' => ['api', 'api-throttle:api']], fu
         'parameters' => ['company' => 'company_id'],
         ]
     ); // end companies API routes
+
+    /**
+     * Donors API routes
+     */
+    Route::group(['prefix' => 'donors'], function () {
+        
+      Route::get('selectlist',
+          [
+              Api\DonorsController::class, 
+              'selectlist'
+          ]
+      )->name('api.donors.selectlist');
+
+    }); 
+
+    Route::resource('donors', 
+      Api\DonorsController::class,
+      ['names' => [
+              'index' => 'api.donors.index',
+              'show' => 'api.donors.show',
+              'update' => 'api.donors.update',
+              'store' => 'api.donors.store',
+              'destroy' => 'api.donors.destroy',
+          ],
+      'except' => ['create', 'edit'],
+      'parameters' => ['donor' => 'donor_id'],
+      ]
+    ); // end donors API routes
 
 
     /**

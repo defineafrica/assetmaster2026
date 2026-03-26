@@ -22,6 +22,9 @@
     @include ('partials.forms.edit.company-select', ['translated_name' => trans('general.company'), 'fieldname' => 'company_id'])
 
 
+    @include ('partials.forms.edit.donor-select', ['translated_name' => trans('general.donor'), 'fieldname' => 'donor_id'])
+
+
   <!-- Asset Tag -->
     <div class="form-group {{ ($errors->has('asset_tag') || $errors->has('asset_tags.1')) ? ' has-error' : '' }}">
       <label for="asset_tag" class="col-md-3 control-label">{{ trans('admin/hardware/form.tag') }}</label>
