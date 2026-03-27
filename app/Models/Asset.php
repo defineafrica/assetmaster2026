@@ -142,6 +142,7 @@ class Asset extends Depreciable
         'assigned_to',
         'assigned_type',
         'company_id',
+        'donor_id',
         'image',
         'location_id',
         'model_id',
@@ -1014,6 +1015,11 @@ class Asset extends Depreciable
     public function supplier()
     {
         return $this->belongsTo(\App\Models\Supplier::class, 'supplier_id');
+    }
+
+    public function donor()
+    {
+        return $this->belongsTo(\App\Models\Donor::class, 'donor_id');
     }
 
     /**
