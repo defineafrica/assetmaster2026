@@ -22,7 +22,7 @@
     @include ('partials.forms.edit.company-select', ['translated_name' => trans('general.company'), 'fieldname' => 'company_id'])
 
 
-    @include ('partials.forms.edit.donor-select', ['translated_name' => trans('general.donor'), 'fieldname' => 'donor_id'])
+    {{-- @include ('partials.forms.edit.donor-select', ['translated_name' => trans('general.donor'), 'fieldname' => 'donor_id']) --}}
 
 
   <!-- Asset Tag -->

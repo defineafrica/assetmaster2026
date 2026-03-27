@@ -893,6 +893,19 @@
                                             </div>
                                         @endif
 
+                                        @if ($asset->donor)
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <strong>
+                                                        {{ trans('general.donor') }}
+                                                    </strong>
+                                                </div>
+                                                <div class="col-md-9">
+                                                    <x-copy-to-clipboard copy_what="donor">{!!  $asset->donor->present()->formattedNameLink !!}</x-copy-to-clipboard>
+                                                </div>
+                                            </div>
+                                        @endif
+
 
                                         @if ($asset->warranty_months)
                                             <div class="row">

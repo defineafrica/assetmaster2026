@@ -177,6 +177,8 @@
 
           <!-- Supplier -->
            @include ('partials.forms.edit.supplier-select', ['translated_name' => trans('general.supplier'), 'fieldname' => 'supplier_id'])
+          <!-- Donor -->
+           @include ('partials.forms.edit.donor-select', ['translated_name' => trans('general.donor'), 'fieldname' => 'donor_id'])
           <!-- Company -->
           @include ('partials.forms.edit.company-select', ['translated_name' => trans('general.company'), 'fieldname' => 'company_id'])
 
