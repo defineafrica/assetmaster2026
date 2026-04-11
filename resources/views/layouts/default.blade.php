@@ -1029,6 +1029,14 @@
                                     </a>
                                 </li>
                             @endcan
+                            @can('index', \App\Models\Inventory::class)
+                                <li aria-hidden="true"{!! (request()->is('inventories*') ? ' class="active"' : '') !!}>
+                                    <a href="{{ route('inventories.index') }}" {{$snipeSettings->shortcuts_enabled == 1 ? "accesskey=2" : ''}} tabindex="-1" data-tooltip="true" data-placement="bottom" data-title="{{ trans('general.inventories') }}">
+                                        <x-icon type="inventories" class="fa-fw" />
+                                        <span class="sr-only">{{ trans('general.inventories') }}</span>
+                                    </a>
+                                </li>
+                            @endcan
                             @can('view', \App\Models\License::class)
                                 <li aria-hidden="true"{!! (request()->is('licenses*') ? ' class="active"' : '') !!}>
                                     <a href="{{ route('licenses.index') }}" {{$snipeSettings->shortcuts_enabled == 1 ? "accesskey=2" : ''}} tabindex="-1" data-tooltip="true" data-placement="bottom" data-title="{{ trans('general.licenses') }}">
@@ -1097,6 +1105,14 @@
                                                 <a href="{{ route('hardware.create') }}" tabindex="-1">
                                                     <x-icon type="assets" class="fa-fw" />
                                                     {{ trans('general.asset') }}
+                                                </a>
+                                            </li>
+                                        @endcan
+                                        @can('create', \App\Models\Inventory::class)
+                                            <li{!! (request()->is('inventories/create') ? ' class="active"' : '') !!}>
+                                                <a href="{{ route('inventories.create') }}" tabindex="-1">
+                                                    <x-icon type="inventories" class="fa-fw" />
+                                                    {{ trans('general.inventory') }}
                                                 </a>
                                             </li>
                                         @endcan
@@ -1419,6 +1435,155 @@
                                     @can('audit', \App\Models\Asset::class)
                                         <li id="bulk-audit-sidenav-option" {!! (request()->is('hardware/bulkaudit') ? ' class="active"' : '') !!}>
                                             <a href="{{ route('assets.bulkaudit') }}">
+                                                {{ trans('general.bulkaudit') }}
+                                            </a>
+                                        </li>
+                                    @endcan
+                                </ul>
+                            </li>
+                        @endcan
+                        @can('index', \App\Models\Inventory::class)
+                            <li class="treeview{{ ((request()->is('inventories*')) ? ' active' : '') }}">
+                                <a href="#">
+                                    <x-icon type="inventories" class="fa-fw" />
+                                    <span>{{ trans('general.inventories') }}</span>
+                                    <x-icon type="angle-left" class="pull-right fa-fw"/>
+                                </a>
+                                <ul class="treeview-menu">
+                                    <li>
+                                        <a href="{{ route('inventories.index') }}">
+                                            <x-icon type="circle" class="text-grey fa-fw"/>
+                                            {{ trans('general.list_all') }}
+                                            <span class="badge">
+                                                {{ (isset($total_inventories)) ? $total_inventories : '' }}
+                                            </span>
+                                        </a>
+                                    </li>
+
+                                    <?php $status_navs = \App\Models\Statuslabel::where('show_in_nav', '=', 1)->withCount('inventories as inventory_count')->get(); ?>
+                                    @if (count($status_navs) > 0)
+                                        @foreach ($status_navs as $status_nav)
+                                            <li{!! (request()->is('statuslabels/'.$status_nav->id) && Request::query('type') == 'inventory' ? ' class="active"' : '') !!}>
+                                                <a href="{{ route('statuslabels.show', ['statuslabel' => $status_nav->id, 'type' => 'inventory']) }}">
+                                                    <i class="fas fa-circle text-grey fa-fw"
+                                                       aria-hidden="true"{!!  ($status_nav->color!='' ? ' style="color: '.e($status_nav->color).'"' : '') !!}></i>
+                                                    {{ $status_nav->name }}
+                                                    <span class="badge badge-secondary">{{ $status_nav->inventory_count }}</span></a></li>
+                                        @endforeach
+                                    @endif
+
+
+                                    <li id="deployed-inventories-sidenav-option" {!! (Request::query('status') == 'Deployed' ? ' class="active"' : '') !!}>
+                                        <a href="{{ url('inventories?status=Deployed') }}">
+                                            <x-icon type="circle" class="text-blue fa-fw" />
+                                            {{ trans('general.deployed') }}
+                                            <span class="badge">{{ (isset($total_inventories_deployed_sidebar)) ? $total_inventories_deployed_sidebar : '' }}</span>
+                                        </a>
+                                    </li>
+                                    <li id="rtd-inventories-sidenav-option"{!! (Request::query('status') == 'RTD' ? ' class="active"' : '') !!}>
+                                        <a href="{{ url('inventories?status=RTD') }}">
+                                            <x-icon type="circle" class="text-green fa-fw" />
+                                            {{ trans('general.ready_to_deploy') }}
+                                            <span class="badge">{{ (isset($total_inventories_rtd_sidebar)) ? $total_inventories_rtd_sidebar : '' }}</span>
+                                        </a>
+                                    </li>
+                                    <li id="pending-inventories-sidenav-option"{!! (Request::query('status') == 'Pending' ? ' class="active"' : '') !!}><a href="{{ url('inventories?status=Pending') }}">
+                                            <x-icon type="circle" class="text-orange fa-fw" />
+                                            {{ trans('general.pending') }}
+                                            <span class="badge">{{ (isset($total_inventories_pending_sidebar)) ? $total_inventories_pending_sidebar : '' }}</span>
+                                        </a>
+                                    </li>
+                                    <li id="undeployable-inventories-sidenav-option"{!! (Request::query('status') == 'Undeployable' ? ' class="active"' : '') !!} ><a
+                                                href="{{ url('inventories?status=Undeployable') }}">
+                                            <x-icon type="x" class="text-red fa-fw" />
+                                            {{ trans('general.undeployable') }}
+                                            <span class="badge">{{ (isset($total_inventories_undeployable_sidebar)) ? $total_inventories_undeployable_sidebar : '' }}</span>
+                                        </a>
+                                    </li>
+                                    <li id="byod-inventories-sidenav-option"{!! (Request::query('status') == 'byod' ? ' class="active"' : '') !!}><a
+                                                href="{{ url('inventories?status=byod') }}">
+                                            <x-icon type="x" class="text-red fa-fw" />
+                                            {{ trans('general.byod') }}
+                                            <span class="badge">{{ (isset($total_inventories_byod_sidebar)) ? $total_inventories_byod_sidebar : '' }}</span>
+                                        </a>
+                                    </li>
+                                    <li id="archived-inventories-sidenav-option"{!! (Request::query('status') == 'Archived' ? ' class="active"' : '') !!}><a
+                                                href="{{ url('inventories?status=Archived') }}">
+                                            <x-icon type="x" class="text-red fa-fw" />
+                                            {{ trans('admin/hardware/general.archived') }}
+                                            <span class="badge">{{ (isset($total_inventories_archived_sidebar)) ? $total_inventories_archived_sidebar : '' }}</span>
+                                        </a>
+                                    </li>
+                                    <li id="requestable-inventories-sidenav-option"{!! (Request::query('status') == 'Requestable' ? ' class="active"' : '') !!}><a
+                                                href="{{ url('inventories?status=Requestable') }}">
+                                            <x-icon type="checkmark" class="text-blue fa-fw" />
+                                            {{ trans('admin/hardware/general.requestable') }}
+                                        </a>
+                                    </li>
+
+                                    @can('audit', \App\Models\Inventory::class)
+                                        <li id="audit-due-inventories-sidenav-option"{!! (request()->is('inventories/audit/due') ? ' class="active"' : '') !!}>
+                                            <a href="{{ route('inventories.audit.due') }}">
+                                                <x-icon type="audit" class="text-yellow fa-fw"/>
+                                                {{ trans('general.audit_due') }}
+                                                <span class="badge">{{ (isset($total_inventories_due_and_overdue_for_audit)) ? $total_inventories_due_and_overdue_for_audit : '' }}</span>
+                                            </a>
+                                        </li>
+                                    @endcan
+
+                                    @can('checkin', \App\Models\Inventory::class)
+                                    <li id="checkin-due-inventories-sidenav-option"{!! (request()->is('inventories/checkins/due') ? ' class="active"' : '') !!}>
+                                        <a href="{{ route('inventories.checkins.due') }}">
+                                            <x-icon type="due" class="text-orange fa-fw"/>
+                                            {{ trans('general.checkin_due') }}
+                                            <span class="badge">{{ (isset($total_inventories_due_and_overdue_for_checkin)) ? $total_inventories_due_and_overdue_for_checkin : '' }}</span>
+                                        </a>
+                                    </li>
+                                    @endcan
+
+                                    <li class="divider">&nbsp;</li>
+                                    @can('checkin', \App\Models\Inventory::class)
+                                        <li{!! (request()->is('inventories/quickscancheckin') ? ' class="active"' : '') !!}>
+                                            <a href="{{ route('inventories.quickscancheckin') }}">
+                                                {{ trans('general.quickscan_checkin') }}
+                                            </a>
+                                        </li>
+                                    @endcan
+
+                                    @can('checkout', \App\Models\Inventory::class)
+                                        <li{!! (request()->is('inventories/bulkcheckout') ? ' class="active"' : '') !!}>
+                                            <a href="{{ route('inventories.bulkcheckout.show') }}">
+                                                {{ trans('general.bulk_checkout') }}
+                                            </a>
+                                        </li>
+                                        <li{!! (request()->is('inventories/requested') ? ' class="active"' : '') !!}>
+                                            <a href="{{ route('inventories.requested') }}">
+                                                {{ trans('general.requested') }}</a>
+                                        </li>
+                                    @endcan
+
+                                    @can('create', \App\Models\Inventory::class)
+                                        <li{!! (request()->query('status') == 'Deleted' ? ' class="active"' : '') !!}>
+                                            <a href="{{ url('inventories?status=Deleted') }}">
+                                                {{ trans('general.deleted') }}
+                                            </a>
+                                        </li>
+                                        <li {!! (request()->is('maintenances*') ? ' class="active"' : '') !!}>
+                                            <a href="{{ route('maintenances.index') }}">
+                                                {{ trans('general.maintenances') }}
+                                            </a>
+                                        </li>
+                                    @endcan
+                                    @can('admin')
+                                        <li id="import-history-inventories-sidenav-option" {!! (request()->is('inventories/history') ? ' class="active"' : '') !!}>
+                                            <a href="{{ url('inventories/history') }}">
+                                                {{ trans('general.import-history') }}
+                                            </a>
+                                        </li>
+                                    @endcan
+                                    @can('audit', \App\Models\Inventory::class)
+                                        <li id="bulk-audit-inventories-sidenav-option" {!! (request()->is('inventories/bulkaudit') ? ' class="active"' : '') !!}>
+                                            <a href="{{ route('inventories.bulkaudit') }}">
                                                 {{ trans('general.bulkaudit') }}
                                             </a>
                                         </li>

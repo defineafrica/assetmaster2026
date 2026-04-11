@@ -1565,6 +1565,7 @@ class Helper
         if ($redirect_option == 'index') {
             return match ($table) {
                 'Assets' => redirect()->route('hardware.index'),
+                'Inventories' => redirect()->route('inventories.index'),
                 'Users' => redirect()->route('users.index'),
                 'Licenses' => redirect()->route('licenses.index'),
                 'Accessories' => redirect()->route('accessories.index'),

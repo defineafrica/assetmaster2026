@@ -522,7 +522,7 @@ class Asset extends Depreciable
 
             return true;
         }
-
+ 
         return false;
     }
 

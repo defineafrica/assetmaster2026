@@ -258,6 +258,9 @@ class IconHelper
                 return 'fa-solid fa-boxes-stacked';
             case 'min-qty':
                 return 'fa-solid fa-chart-pie';
+            case 'inventories':
+            case 'inventory':
+                return 'fas fa-boxes';
 
 
 

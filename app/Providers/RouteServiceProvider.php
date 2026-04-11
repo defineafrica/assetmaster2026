@@ -25,6 +25,8 @@ class RouteServiceProvider extends ServiceProvider
             $this->mapWebRoutes();
 
             require base_path('routes/scim.php');
+            require base_path('routes/inventory-api.php');
+            require base_path('routes/inventory-web.php');
         });
     }
 

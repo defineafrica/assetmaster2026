@@ -13,7 +13,7 @@ class Checkoutable
         public string $name,
         public string $type,
         public object $acceptance,
-        public readonly User|Asset|Location|null $assignee,
+        public readonly User|Asset|Location|Inventory|null $assignee,
         public readonly string $plain_text_category,
         public readonly string $plain_text_model,
         public readonly string $plain_text_name,
@@ -57,7 +57,13 @@ class Checkoutable
             $category = optional($unaccepted_row->category?->present())->nameUrl() ?? '';
             $model = $unaccepted_row->model_number ?? '';
             $name = $unaccepted_row?->present()?->nameUrl()  ?? '';
-        }
+         }
+         if($unaccepted_row instanceof Inventory){
+            $category = optional($unaccepted_row->model?->category?->present())->nameUrl() ?? '';
+            $model = optional($unaccepted_row->present())->modelUrl() ?? '';
+            $name = optional($unaccepted_row->present())->nameUrl() ?? '';
+            $tag = (string) ($unaccepted_row->inventory_tag ?? '');
+         }
 
         return new self(
             acceptance_id: $acceptance->id,
@@ -73,7 +79,7 @@ class Checkoutable
             plain_text_category: $unaccepted_row?->model?->category?->name ?? $unaccepted_row?->license?->category?->name ?? $unaccepted_row?->category?->name ?? '',
             plain_text_model: $unaccepted_row?->model?->name ?? $unaccepted_row?->model_number ?? '',
             plain_text_name: $unaccepted_row?->name ?? $unaccepted_row?->license?->name ?? '',
-            plain_text_company: $unaccepted_row?->company->name ?? $unaccepted_row?->license?->company?->name ?? '',
+            plain_text_company: $unaccepted_row?->company->name ?? $unaccepted_row?->license?->company?->name ?? ($unaccepted_row instanceof Inventory ? $unaccepted_row?->company?->name : '') ?? '',
         );
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Models\Asset;
+use App\Models\Inventory;
 use Closure;
 use App\Models\Setting;
 use Illuminate\Support\Facades\Log;
@@ -81,6 +82,93 @@ class AssetCountForSidebar
         } catch (\Exception $e) {
             Log::debug($e);
         }
+
+        try {
+            $total_inventories = Inventory::AssetsForShow()->count();
+            view()->share('total_inventories', $total_inventories);
+        } catch (\Exception $e) {
+            Log::debug($e);
+        }
+
+        try {
+            $total_inventories_rtd_sidebar = Inventory::RTD()->count();
+            view()->share('total_inventories_rtd_sidebar', $total_inventories_rtd_sidebar);
+        } catch (\Exception $e) {
+            Log::debug($e);
+        }
+
+        try {
+            $total_inventories_deployed_sidebar = Inventory::Deployed()->count();
+            view()->share('total_inventories_deployed_sidebar', $total_inventories_deployed_sidebar);
+        } catch (\Exception $e) {
+            Log::debug($e);
+        }
+
+        try {
+            $total_inventories_pending_sidebar = Inventory::Pending()->count();
+            view()->share('total_inventories_pending_sidebar', $total_inventories_pending_sidebar);
+        } catch (\Exception $e) {
+            Log::debug($e);
+        }
+
+        try {
+            $total_inventories_undeployable_sidebar = Inventory::Undeployable()->count();
+            view()->share('total_inventories_undeployable_sidebar', $total_inventories_undeployable_sidebar);
+        } catch (\Exception $e) {
+            Log::debug($e);
+        }
+
+        try {
+            $total_inventories_byod_sidebar = Inventory::where('byod', '=', '1')->count();
+            view()->share('total_inventories_byod_sidebar', $total_inventories_byod_sidebar);
+        } catch (\Exception $e) {
+            Log::debug($e);
+        }
+
+        try {
+            $total_inventories_archived_sidebar = Inventory::Archived()->count();
+            view()->share('total_inventories_archived_sidebar', $total_inventories_archived_sidebar);
+        } catch (\Exception $e) {
+            Log::debug($e);
+        }
+
+        try {
+            $total_inventories_requestable_sidebar = Inventory::RequestableAssets()->count();
+            view()->share('total_inventories_requestable_sidebar', $total_inventories_requestable_sidebar);
+        } catch (\Exception $e) {
+            Log::debug($e);
+        }
+
+        try {
+            $total_inventories_due_for_audit = Inventory::DueForAudit($settings)->count();
+            view()->share('total_inventories_due_for_audit', $total_inventories_due_for_audit);
+        } catch (\Exception $e) {
+            Log::debug($e);
+        }
+
+        try {
+            $total_inventories_overdue_for_audit = Inventory::OverdueForAudit()->count();
+            view()->share('total_inventories_overdue_for_audit', $total_inventories_overdue_for_audit);
+        } catch (\Exception $e) {
+            Log::debug($e);
+        }
+
+        try {
+            $total_inventories_due_for_checkin = Inventory::DueForCheckin($settings)->count();
+            view()->share('total_inventories_due_for_checkin', $total_inventories_due_for_checkin);
+        } catch (\Exception $e) {
+            Log::debug($e);
+        }
+
+        try {
+            $total_inventories_overdue_for_checkin = Inventory::OverdueForCheckin()->count();
+            view()->share('total_inventories_overdue_for_checkin', $total_inventories_overdue_for_checkin);
+        } catch (\Exception $e) {
+            Log::debug($e);
+        }
+
+        view()->share('total_inventories_due_and_overdue_for_checkin', ($total_inventories_due_for_checkin + $total_inventories_overdue_for_checkin));
+        view()->share('total_inventories_due_and_overdue_for_audit', ($total_inventories_due_for_audit + $total_inventories_overdue_for_audit));
 
         try {
             $total_due_for_audit = Asset::DueForAudit($settings)->count();
