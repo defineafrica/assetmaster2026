@@ -77,6 +77,11 @@ class Statuslabel extends SnipeModel
         return $this->hasMany(\App\Models\Asset::class, 'status_id');
     }
 
+    public function inventories()
+    {
+        return $this->hasMany(\App\Models\Inventory::class, 'status_id');
+    }
+
     public function adminuser()
     {
         return $this->belongsTo(\App\Models\User::class, 'created_by')->withTrashed();

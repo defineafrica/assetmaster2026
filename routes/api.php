@@ -634,6 +634,95 @@ Route::group(['prefix' => 'v1', 'middleware' => ['api', 'api-throttle:api']], fu
         ); // end assets API routes
 
         /**
+         * Inventories API routes
+         */
+        Route::group(['prefix' => 'inventories'], function () {
+
+            Route::get('selectlist',
+                [
+                    Api\InventoriesController::class,
+                    'selectlist'
+                ]
+            )->name('inventories.selectlist');
+
+            Route::get('bytag/{tag}',
+                [
+                    Api\InventoriesController::class,
+                    'showByTag'
+                ]
+            )->name('inventories.show.bytag');
+
+            Route::get('byserial/{any}',
+                [
+                    Api\InventoriesController::class,
+                    'showBySerial'
+                ]
+            )->name('inventories.show.byserial');
+        });
+
+        Route::patch('/inventories/{inventory}', [Api\InventoriesController::class, 'update'])->name('api.inventories.update');
+        Route::put('/inventories/{inventory}', [Api\InventoriesController::class, 'update'])->name('api.inventories.put-update');
+
+        Route::resource('inventories',
+            Api\InventoriesController::class,
+            ['names' => [
+                    'index' => 'api.inventories.index',
+                    'show' => 'api.inventories.show',
+                    'store' => 'api.inventories.store',
+                    'destroy' => 'api.inventories.destroy',
+                ],
+                'except' => ['create', 'edit', 'update'],
+            'parameters' => ['inventory' => 'inventory_id'],
+            ]
+        ); // end inventories API routes
+
+        // Due or overdue API endpoints for inventory audit/checkins
+        Route::get('{action}/{upcoming_status}',
+              [
+                  Api\InventoriesController::class,
+                  'index'
+              ]
+        )->name('api.inventories.list-upcoming')
+        ->where(['action' => 'audit|audits|checkins', 'upcoming_status' => 'due|overdue|due-or-overdue']);
+
+        // Legacy URL for inventory audit
+        Route::post('inventory/audit',
+            [
+                Api\InventoriesController::class,
+                'audit'
+            ]
+        )->name('api.inventory.audit.legacy');
+
+        // Newer URL for inventory audit
+        Route::post('{inventory}/audit',
+        [
+            Api\InventoriesController::class,
+            'audit'
+        ]
+        )->name('api.inventory.audit');
+
+        Route::post('{inventory}/checkin',
+        [
+            Api\InventoriesController::class,
+            'checkin'
+        ]
+        )->name('api.inventory.checkin');
+
+        Route::post('{inventory}/checkout',
+          [
+            Api\InventoriesController::class,
+            'checkout'
+          ]
+        )->name('api.inventory.checkout');
+
+        Route::post('inventory/checkinbytag',
+          [
+            Api\InventoriesController::class,
+            'checkinByTag'
+          ]
+        )->name('api.inventory.checkinbytag');
+
+        /**
          * Asset maintenances API routes
          */
         Route::resource('maintenances', 

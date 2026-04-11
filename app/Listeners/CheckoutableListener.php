@@ -8,7 +8,9 @@ use App\Mail\CheckinComponentMail;
 use App\Mail\CheckinLicenseMail;
 use App\Mail\CheckoutAccessoryMail;
 use App\Mail\CheckoutAssetMail;
+use App\Mail\CheckoutInventoryMail;
 use App\Mail\CheckinAssetMail;
+use App\Mail\CheckinInventoryMail;
 use App\Mail\CheckoutComponentMail;
 use App\Mail\CheckoutConsumableMail;
 use App\Mail\CheckoutLicenseMail;
@@ -18,6 +20,7 @@ use App\Models\Category;
 use App\Models\CheckoutAcceptance;
 use App\Models\Component;
 use App\Models\Consumable;
+use App\Models\Inventory;
 use App\Models\LicenseSeat;
 use App\Models\Location;
 use App\Models\Setting;
@@ -25,11 +28,13 @@ use App\Models\User;
 use App\Notifications\CheckinAccessoryNotification;
 use App\Notifications\CheckinAssetNotification;
 use App\Notifications\CheckinComponentNotification;
+use App\Notifications\CheckinInventoryNotification;
 use App\Notifications\CheckinLicenseSeatNotification;
 use App\Notifications\CheckoutAccessoryNotification;
 use App\Notifications\CheckoutAssetNotification;
 use App\Notifications\CheckoutComponentNotification;
 use App\Notifications\CheckoutConsumableNotification;
+use App\Notifications\CheckoutInventoryNotification;
 use App\Notifications\CheckoutLicenseSeatNotification;
 use GuzzleHttp\Exception\ClientException;
 use Illuminate\Database\Eloquent\Model;
@@ -310,6 +315,9 @@ class CheckoutableListener
             case Asset::class:
                 $notificationClass = CheckinAssetNotification::class;
                 break;
+            case Inventory::class:
+                $notificationClass = CheckinInventoryNotification::class;
+                break;
             case LicenseSeat::class:
                 $notificationClass = CheckinLicenseSeatNotification::class;
                 break;
@@ -343,6 +351,9 @@ class CheckoutableListener
             case Consumable::class:
                 $notificationClass = CheckoutConsumableNotification::class;
                 break;
+            case Inventory::class:
+                $notificationClass = CheckoutInventoryNotification::class;
+                break;
             case LicenseSeat::class:
                 $notificationClass = CheckoutLicenseSeatNotification::class;
                 break;
@@ -358,6 +369,7 @@ class CheckoutableListener
         $lookup = [
             Accessory::class => CheckoutAccessoryMail::class,
             Asset::class => CheckoutAssetMail::class,
+            Inventory::class => CheckoutInventoryMail::class,
             LicenseSeat::class => CheckoutLicenseMail::class,
             Consumable::class => CheckoutConsumableMail::class,
             Component::class => CheckoutComponentMail::class,
@@ -372,6 +384,7 @@ class CheckoutableListener
         $lookup = [
             Accessory::class => CheckinAccessoryMail::class,
             Asset::class => CheckinAssetMail::class,
+            Inventory::class => CheckinInventoryMail::class,
             LicenseSeat::class => CheckinLicenseMail::class,
             Component::class => CheckinComponentMail::class,
         ];
@@ -519,10 +532,12 @@ class CheckoutableListener
     {
         return match (true) {
             $checkoutable instanceof Asset => $checkoutable->model->category,
+            $checkoutable instanceof Inventory => $checkoutable->model->category,
             $checkoutable instanceof Accessory,
-                $checkoutable instanceof Consumable,
-                $checkoutable instanceof Component => $checkoutable->category,
+            $checkoutable instanceof Consumable,
+            $checkoutable instanceof Component => $checkoutable->category,
             $checkoutable instanceof LicenseSeat => $checkoutable->license->category,
+            default => null,
         };
     }
 }

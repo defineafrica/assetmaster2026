@@ -64,6 +64,9 @@ class SettingsServiceProvider extends ServiceProvider
         app()->singleton('assets_upload_path', function () {
             return 'assets/';
         });
+            app()->singleton('inventories_upload_path', function () {
+            return 'inventories/';
+        });
 
         app()->singleton('maintenances_path', function () {
             return 'maintenances/';

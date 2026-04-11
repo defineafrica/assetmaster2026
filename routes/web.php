@@ -84,9 +84,13 @@ Route::group(['middleware' => 'auth'], function () {
 
     });
 
-    Route::resource('manufacturers', ManufacturersController::class);
+Route::resource('manufacturers', ManufacturersController::class);
 
-    Route::post('manufacturers/bulk/delete', [BulkManufacturersController::class, 'destroy'])->name('manufacturers.bulk.delete');
+Route::post('manufacturers/bulk/delete', [BulkManufacturersController::class, 'destroy'])->name('manufacturers.bulk.delete');
+
+require __DIR__ . '/web/inventories.php';
+
+require __DIR__ . '/web/inventory-modules.php';
 
     /*
     * Suppliers
