@@ -1302,6 +1302,7 @@
         'consumables',
         'departments',
         'depreciations',
+        'donors',
         'fieldsets',
         'groups',
         'hardware',

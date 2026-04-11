@@ -95,6 +95,8 @@ return [
     'clear_selection'		=> 'Clear Selection',
     'companies'			    => 'Companies',
     'company'				=> 'Company',
+    'donor'				  => 'Donor',
+    'donors'				  => 'Donors',
     'component'			    => 'Component',
     'components'			=> 'Components',
     'complete'				=> 'Complete',
