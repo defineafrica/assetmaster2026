@@ -146,6 +146,7 @@ class Inventory extends Depreciable
     protected $searchableRelations = [
         'assetstatus'        => ['name'],
         'supplier'           => ['name'],
+        'donor'              => ['name'],
         'company'            => ['name'],
         'defaultLoc'         => ['name'],
         'location'           => ['name'],
@@ -1234,7 +1235,15 @@ class Inventory extends Depreciable
                         }
                         );
                     }
-                    
+
+                    if ($fieldname == 'donor') {
+                        $query->whereHas(
+                            'donor', function ($query) use ($search_val) {
+                            $query->where('donors.name', 'LIKE', '%'.$search_val.'%');
+                        }
+                        );
+                    }
+
                     if ($fieldname == 'status_label') {
                         $query->whereHas(
                             'assetstatus', function ($query) use ($search_val) {

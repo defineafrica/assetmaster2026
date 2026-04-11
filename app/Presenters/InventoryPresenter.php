@@ -138,6 +138,13 @@ class InventoryPresenter extends Presenter
                 'visible' => false,
                 'formatter' => 'suppliersLinkObjFormatter',
             ], [
+                'field' => 'donor',
+                'searchable' => true,
+                'sortable' => true,
+                'title' => trans('general.donor'),
+                'visible' => true,
+                'formatter' => 'donorsLinkObjFormatter',
+            ], [
                 'field' => 'purchase_date',
                 'searchable' => true,
                 'sortable' => true,

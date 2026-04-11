@@ -67,6 +67,11 @@ class InventoriesTransformer
                 'name'=> e($inventory->supplier->name),
                 'tag_color'=> ($inventory->supplier->tag_color) ? e($inventory->supplier->tag_color) : null,
             ] : null,
+            'donor' => ($inventory->donor) ? [
+                'id' => (int) $inventory->donor->id,
+                'name'=> e($inventory->donor->name),
+                'tag_color'=> ($inventory->donor->tag_color) ? e($inventory->donor->tag_color) : null,
+            ] : null,
             'notes' => ($inventory->notes) ? Helper::parseEscapedMarkedownInline($inventory->notes) : null,
             'order_number' => ($inventory->order_number) ? e($inventory->order_number) : null,
             'company' => ($inventory->company) ? [
