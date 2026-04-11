@@ -9,6 +9,7 @@ use App\Exceptions\AssetNotRequestable;
 use App\Models\Actionlog;
 use App\Models\Asset;
 use App\Models\AssetModel;
+use App\Models\Inventory;
 use App\Models\Setting;
 use App\Models\User;
 use App\Notifications\RequestAssetCancelation;
@@ -170,7 +171,9 @@ class ViewAssetsController extends Controller
             },
         ])->RequestableModels()->get();
 
-        return view('account/requestable-assets', compact('assets', 'models'));
+        $inventories = Inventory::with('model', 'defaultLoc', 'location', 'assignedTo', 'requests')->RequestableAssets();
+
+        return view('account/requestable-assets', compact('assets', 'models', 'inventories'));
     }
 
     public function getRequestItem(Request $request, $itemType, $itemId = null, $cancel_by_admin = false, $requestingUser = null): RedirectResponse

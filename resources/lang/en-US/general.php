@@ -52,6 +52,7 @@ return [
     'inventory_location_update_default_current' => 'Update Inventory Location Only',
     'inventory_location_update_default' => 'Update Default Inventory Location Only',
     'inventory_location_update_actual' => 'Update Actual Inventory Location Only',
+    'inventory_tag'=>'Tag No',
     'assets_audited'        => 'assets audited',
     'assets_checked_in_count'     => 'assets checked in',
     'assets_checked_out_count'     => 'assets checked out',
@@ -287,6 +288,7 @@ return [
     'select_var'            => 'Select :thing... ', // this will eventually replace all of our other selects
     'select'				=> 'Select',
     'select_all'            => 'Select All',
+    'select_donor'=>'Select Donor',
     'search'				=> 'Search',
     'select_category'       => 'Select a Category',
     'select_datasource' => 'Select a data source',

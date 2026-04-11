@@ -7,6 +7,7 @@ use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\FilterRequest;
 use App\Http\Transformers\InventoriesTransformer;
+use App\Models\CustomField;
 use App\Models\Inventory;
 use App\Models\Location;
 use App\Models\Setting;
@@ -612,5 +613,86 @@ class InventoriesController extends Controller
         }
 
         return response()->json(Helper::formatStandardApiResponse('error', null, trans('admin/hardware/message.does_not_exist')), 200);
+    }
+
+    /**
+     * Returns JSON listing of all requestable inventories
+     *
+     * @author [A. Gianotto] [<snipe@snipe.net>]
+     * @since [v4.0]
+     */
+    public function requestable(Request $request): JsonResponse | array
+    {
+        $this->authorize('viewRequestable', Inventory::class);
+
+        $allowed_columns = [
+            'name',
+            'inventory_tag',
+            'serial',
+            'model_number',
+            'image',
+            'purchase_cost',
+            'expected_checkin',
+        ];
+
+        $all_custom_fields = CustomField::all();
+
+        foreach ($all_custom_fields as $field) {
+            $allowed_columns[] = $field->db_column_name();
+        }
+
+        $inventories = Inventory::select('inventories.*')
+            ->with(
+                'location',
+                'assetstatus',
+                'assetlog',
+                'company',
+                'assignedTo',
+                'model.category',
+                'model.manufacturer',
+                'model.fieldset',
+                'supplier',
+                'requests'
+            );
+
+        if ($request->filled('search')) {
+            $inventories->TextSearch($request->input('search'));
+        }
+
+        foreach ($all_custom_fields as $field) {
+            if ($request->filled($field->db_column_name())) {
+                $inventories->where($field->db_column_name(), '=', $request->input($field->db_column_name()));
+            }
+        }
+
+        $order = $request->input('order') === 'asc' ? 'asc' : 'desc';
+        $sort_override = str_replace('custom_fields.', '', $request->input('sort'));
+
+        $column_sort = in_array($sort_override, $allowed_columns) ? $sort_override : 'inventories.created_at';
+
+        switch ($request->input('sort')) {
+            case 'model':
+                $inventories->OrderModels($order);
+                break;
+            case 'model_number':
+                $inventories->OrderModelNumber($order);
+                break;
+            case 'location':
+                $inventories->OrderLocation($order);
+                break;
+            default:
+                $inventories->orderBy($column_sort, $order);
+                break;
+        }
+
+        $inventories->requestableAssets();
+
+        $offset = ($request->input('offset') > $inventories->count()) ? $inventories->count() : app('api_offset_value');
+        $limit = app('api_limit_value');
+
+        $total = $inventories->count();
+        $inventories = $inventories->skip($offset)->take($limit)->get();
+
+        return (new InventoriesTransformer)->transformRequestedInventories($inventories, $total);
     }
 }

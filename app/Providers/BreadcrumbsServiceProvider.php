@@ -13,6 +13,7 @@ use App\Models\CustomFieldset;
 use App\Models\Department;
 use App\Models\Depreciation;
 use App\Models\Group;
+use App\Models\Inventory;
 use App\Models\License;
 use App\Models\LicenseSeat;
 use App\Models\Location;
@@ -80,6 +81,31 @@ class BreadcrumbsServiceProvider extends ServiceProvider
         Breadcrumbs::for('hardware.edit', fn (Trail $trail, Asset $asset) =>
         $trail->parent('hardware.index', route('hardware.index'))
             ->push($asset->display_name, route('hardware.show', $asset))
+            ->push(trans('admin/hardware/general.edit'))
+        );
+
+
+        /**
+         * Inventory Breadcrumbs
+         */
+        Breadcrumbs::for('inventories.index', fn (Trail $trail) =>
+        $trail->parent('home', route('home'))
+            ->push(trans('general.inventories'), route('inventories.index'))
+        );
+
+        Breadcrumbs::for('inventories.create', fn (Trail $trail) =>
+        $trail->parent('inventories.index', route('inventories.index'))
+            ->push(trans('general.create'), route('inventories.create'))
+        );
+
+        Breadcrumbs::for('inventories.show', fn (Trail $trail, Inventory $inventory) =>
+        $trail->parent('inventories.index', route('inventories.index'))
+            ->push($inventory->inventory_tag, route('inventories.show', $inventory))
+        );
+
+        Breadcrumbs::for('inventories.edit', fn (Trail $trail, Inventory $inventory) =>
+        $trail->parent('inventories.index', route('inventories.index'))
+            ->push($inventory->inventory_tag, route('inventories.show', $inventory))
             ->push(trans('admin/hardware/general.edit'))
         );
 

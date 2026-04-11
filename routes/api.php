@@ -53,10 +53,17 @@ Route::group(['prefix' => 'v1', 'middleware' => ['api', 'api-throttle:api']], fu
 
         Route::get('requestable/hardware',
             [
-                Api\AssetsController::class, 
+                Api\AssetsController::class,
                 'requestable'
             ]
         )->name('api.assets.requestable');
+
+        Route::get('requestable/inventories',
+            [
+                Api\InventoriesController::class,
+                'requestable'
+            ]
+        )->name('api.inventories.requestable');
 
         Route::post('personal-access-tokens',
             [
