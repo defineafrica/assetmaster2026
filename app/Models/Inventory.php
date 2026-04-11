@@ -1278,6 +1278,7 @@ class Inventory extends Depreciable
 
                     if (($fieldname!='category') && ($fieldname!='model_number') && ($fieldname!='rtd_location') && ($fieldname!='location') && ($fieldname!='supplier')
                         && ($fieldname!='status_label') && ($fieldname!='assigned_to') && ($fieldname!='model')  && ($fieldname!='jobtitle') && ($fieldname!='company') && ($fieldname!='manufacturer')
+                        && ($fieldname!='donor')
                     ) {
                         $query->where('inventories.'.$fieldname, 'LIKE', '%' . $search_val . '%');
                     }
