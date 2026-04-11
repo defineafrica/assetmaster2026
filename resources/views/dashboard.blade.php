@@ -48,6 +48,25 @@
     </div><!-- ./col -->
 
     <div class="col-lg-4 col-xs-12">
+        <a href="{{ route('inventories.index') }}">
+            <!-- small inventory box -->
+            <div class="dashboard small-box" style="background-color: #ffffff; border: 2px solid #6f42c1; border-radius: 8px; color:blue !important;">
+                <div class="inner">
+                   <h3 style="color: #6f42c1 !important;">{{ number_format(\App\Models\Inventory::AssetsForShow()->count()) }}</h3>
+<p style="color: #6f42c1 !important;">{{ trans('general.inventories') }}</p>
+                </div>
+                <div class="icon" aria-hidden="true" style="color: #6f42c1;">
+                    <x-icon type="inventories" />
+                </div>
+                <span class="small-box-footer" style="color: #6f42c1 !important;">
+                    {{ trans('general.view_all') }}
+                    <x-icon type="arrow-circle-right" />
+                </span>
+            </div>
+        </a>
+    </div><!-- ./col -->
+
+    <div class="col-lg-4 col-xs-12">
         <a href="{{ route('licenses.index') }}" aria-hidden="true">
             <!-- small license box -->
             <div class="dashboard small-box" style="background-color: #ffffff; border: 2px solid #28a745; border-radius: 8px;">
