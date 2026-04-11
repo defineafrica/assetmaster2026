@@ -473,6 +473,11 @@ class Inventory extends Depreciable
         return $this->morphMany(self::class, 'assigned', 'assigned_type', 'assigned_to')->withTrashed();
     }
 
+    public function assignedAssets()
+    {
+        return $this->morphMany(\App\Models\Asset::class, 'assigned', 'assigned_type', 'assigned_to')->withTrashed();
+    }
+
     public function assignedAccessories()
     {
         return $this->morphMany(\App\Models\AccessoryCheckout::class, 'assigned', 'assigned_type', 'assigned_to');

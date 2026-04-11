@@ -30,14 +30,14 @@ class InventoryPresenter extends Presenter
                 'switchable' => false,
                 'title' => trans('admin/hardware/table.asset_tag'),
                 'visible' => true,
-                'formatter' => 'inventoryLinkFormatter',
+                'formatter' => 'inventoriesLinkFormatter',
             ],  [
                 'field' => 'name',
                 'searchable' => true,
                 'sortable' => true,
                 'title' => trans('admin/hardware/form.name'),
                 'visible' => true,
-                'formatter' => 'inventoryLinkFormatter',
+                'formatter' => 'inventoriesLinkFormatter',
             ], [
                 'field' => 'company',
                 'searchable' => true,
@@ -60,7 +60,7 @@ class InventoryPresenter extends Presenter
                 'sortable' => true,
                 'title' => trans('admin/hardware/form.serial'),
                 'visible' => true,
-                'formatter' => 'inventoryLinkFormatter',
+                'formatter' => 'inventoriesLinkFormatter',
             ],  [
                 'field' => 'model',
                 'searchable' => true,
@@ -331,7 +331,7 @@ class InventoryPresenter extends Presenter
             'switchable' => false,
             'title' => trans('general.checkin').'/'.trans('general.checkout'),
             'visible' => true,
-            'formatter' => 'inventoryInOutFormatter',
+            'formatter' => 'inventoriesInOutFormatter',
             'printIgnore' => true,
         ];
 
@@ -341,7 +341,7 @@ class InventoryPresenter extends Presenter
             'sortable' => false,
             'switchable' => false,
             'title' => trans('table.actions'),
-            'formatter' => 'inventoryActionsFormatter',
+            'formatter' => 'inventoriesActionsFormatter',
             'printIgnore' => true,
         ];
 

@@ -84,7 +84,7 @@ class InventoriesController extends Controller
 
         for ($a = 1, $aMax = count($inventory_tags); $a <= $aMax; $a++) {
             if ($model && $model->require_serial === 1 && empty($serials[$a])) {
-                $serial_errors["serials.$a"] = trans('admin/hardware/form.serial_required', ['number' => $a]);
+                $serial_errors["serials.$a"] = trans('admin/inventory/form.serial_required', ['number' => $a]);
             }
         }
 
@@ -180,21 +180,21 @@ class InventoriesController extends Controller
                         $target = User::find($userId);
 
                         if (!$target) {
-                            return redirect()->back()->withInput()->with('error', trans('admin/hardware/message.create.target_not_found.user'));
+                            return redirect()->back()->withInput()->with('error', trans('admin/inventory/message.create.target_not_found.user'));
                         }
                         $location = $target->location_id;
                     } elseif ($inventoryId = request('assigned_inventory')) {
                         $target = Inventory::find($inventoryId);
 
                         if (!$target) {
-                            return redirect()->back()->withInput()->with('error', trans('admin/hardware/message.create.target_not_found.inventory'));
+                            return redirect()->back()->withInput()->with('error', trans('admin/inventory/message.create.target_not_found.inventory'));
                         }
                         $location = $target->location_id;
                     } elseif ($locationId = request('assigned_location')) {
                         $target = Location::find($locationId);
 
                         if (!$target) {
-                            return redirect()->back()->withInput()->with('error', trans('admin/hardware/message.create.target_not_found.location'));
+                            return redirect()->back()->withInput()->with('error', trans('admin/inventory/message.create.target_not_found.location'));
                         }
                         $location = $target->id;
                     }
@@ -228,15 +228,15 @@ class InventoriesController extends Controller
         if ($successes) {
             if ($failures) {
                 return Helper::getRedirectOption($request, $inventory->id, 'Inventories')
-                ->with('success-unescaped', trans_choice('admin/hardware/message.create.multi_success_linked', $successes, ['links' => join(", ", $successes)]))
-                    ->with('warning', trans_choice('admin/hardware/message.create.partial_failure', $failures, ['failures' => join("; ", $failures)]));
+                ->with('success-unescaped', trans_choice('admin/inventory/message.create.multi_success_linked', $successes, ['links' => join(", ", $successes)]))
+                    ->with('warning', trans_choice('admin/inventory/message.create.partial_failure', $failures, ['failures' => join("; ", $failures)]));
             } else {
                 if (count($successes) == 1) {
                     return Helper::getRedirectOption($request, $inventory->id, 'Inventories')
-                        ->with('success-unescaped', trans('admin/hardware/message.create.success_linked', ['link' => route('inventories.show', $inventory), 'id', 'tag' => e($inventory->inventory_tag)]));
+                        ->with('success-unescaped', trans('admin/inventory/message.create.success_linked', ['link' => route('inventories.show', $inventory), 'id', 'tag' => e($inventory->inventory_tag)]));
                 } else {
                     return Helper::getRedirectOption($request, $inventory->id, 'Inventories')
-                        ->with('success-unescaped', trans_choice('admin/hardware/message.create.multi_success_linked', $successes, ['links' => join(", ", $successes)]));
+                        ->with('success-unescaped', trans_choice('admin/inventory/message.create.multi_success_linked', $successes, ['links' => join(", ", $successes)]));
                 }
             }
         }
@@ -248,7 +248,7 @@ class InventoriesController extends Controller
     {
         $this->authorize($inventory);
         session()->put('back_url', url()->previous());
-        return view('hardware/inventory/edit')
+        return view('inventory/edit')
             ->with('item', $inventory)
             ->with('statuslabel_list', Helper::statusLabelList())
             ->with('statuslabel_types', Helper::statusTypeList());
@@ -280,11 +280,11 @@ class InventoriesController extends Controller
                 'url' => route('qr_code/inventories', $inventory),
             ];
 
-            return view('hardware/inventory/view', compact('inventory', 'qr_code', 'settings'))
+            return view('inventory/view', compact('inventory', 'qr_code', 'settings'))
                 ->with('use_currency', $use_currency)->with('audit_log', $audit_log);
         }
 
-        return redirect()->route('inventories.index')->with('error', trans('admin/hardware/message.does_not_exist'));
+        return redirect()->route('inventories.index')->with('error', trans('admin/inventory/message.does_not_exist'));
     }
 
     public function update(ImageUploadRequest $request, Inventory $inventory) : RedirectResponse
@@ -399,13 +399,13 @@ class InventoriesController extends Controller
 
         if ($model && $model->require_serial === 1 && empty($serial[1])) {
             return redirect()->to(Helper::getRedirectOption($request, $inventory->id, 'Inventories'))
-                ->with('warning', trans('admin/hardware/form.serial_required_post_model_update', [
+                ->with('warning', trans('admin/inventory/form.serial_required_post_model_update', [
                     'inventory_model' => $model->name
                 ]));
         }
         if ($inventory->save()) {
             return Helper::getRedirectOption($request, $inventory->id, 'Inventories')
-                ->with('success', trans('admin/hardware/message.update.success'));
+                ->with('success', trans('admin/inventory/message.update.success'));
         }
 
         return redirect()->back()->withInput()->withErrors($inventory->getErrors());
@@ -414,7 +414,7 @@ class InventoriesController extends Controller
     public function destroy(Request $request, $inventoryId) : RedirectResponse
     {
         if (is_null($inventory = Inventory::find($inventoryId))) {
-            return redirect()->route('inventories.index')->with('error', trans('admin/hardware/message.does_not_exist'));
+            return redirect()->route('inventories.index')->with('error', trans('admin/inventory/message.does_not_exist'));
         }
 
         $this->authorize('delete', $inventory);
@@ -439,7 +439,7 @@ class InventoriesController extends Controller
 
         $inventory->delete();
 
-        return redirect()->route('inventories.index')->with('success', trans('admin/hardware/message.delete.success'));
+        return redirect()->route('inventories.index')->with('success', trans('admin/inventory/message.delete.success'));
     }
 
     public function getInventoryBySerial(Request $request) : RedirectResponse
@@ -447,7 +447,7 @@ class InventoriesController extends Controller
         $topsearch = ($request->input('topsearch')=="true");
 
         if (!$inventory = Inventory::where('serial', '=', $request->input('serial'))->first()) {
-            return redirect()->route('inventories.index')->with('error', trans('admin/hardware/message.does_not_exist'));
+            return redirect()->route('inventories.index')->with('error', trans('admin/inventory/message.does_not_exist'));
         }
         $this->authorize('view', $inventory);
         return redirect()->route('inventories.show', $inventory->id)->with('topsearch', $topsearch);
@@ -463,7 +463,7 @@ class InventoriesController extends Controller
         if ($inventories->count() != 1) {
             return redirect()->route('inventories.index')
                 ->with('search', $tag)
-                ->with('warning', trans('admin/hardware/message.does_not_exist_var', [ 'inventory_tag' => $tag ]));
+                ->with('warning', trans('admin/inventory/message.does_not_exist_var', [ 'inventory_tag' => $tag ]));
         }
         $inventory = $inventories->first();
         $this->authorize('view', $inventory);
@@ -551,7 +551,7 @@ class InventoriesController extends Controller
         $cloned->assigned_to = '';
         $cloned->deleted_at = '';
 
-        return view('hardware/inventory/edit')
+        return view('inventory/edit')
             ->with('statuslabel_list', Helper::statusLabelList())
             ->with('statuslabel_types', Helper::statusTypeList())
             ->with('cloned_model', $cloned_model)
@@ -562,7 +562,7 @@ class InventoriesController extends Controller
     {
         $this->authorize('admin');
 
-        return view('hardware/inventory/history');
+        return view('inventory/history');
     }
 
     public function postImportHistory(Request $request)
@@ -698,7 +698,7 @@ class InventoriesController extends Controller
             }
         }
 
-        return view('hardware/inventory/history')->with('status', $status);
+        return view('inventory/history')->with('status', $status);
     }
 
     public function sortByName(array $recordA, array $recordB): int
@@ -718,15 +718,15 @@ class InventoriesController extends Controller
             if ($inventory->restore()) {
                 $deleted_inventories = Inventory::onlyTrashed()->count();
                 if ($deleted_inventories > 0) {
-                    return redirect()->back()->with('success', trans('admin/hardware/message.restore.success'));
+                    return redirect()->back()->with('success', trans('admin/inventory/message.restore.success'));
                 }
-                return redirect()->route('inventories.index')->with('success', trans('admin/hardware/message.restore.success'));
+                return redirect()->route('inventories.index')->with('success', trans('admin/inventory/message.restore.success'));
             }
 
             return redirect()->back()->with('error', trans('general.could_not_restore', ['item_type' => trans('general.inventory'), 'error' => $inventory->getErrors()->first()]));
         }
 
-        return redirect()->route('inventories.index')->with('error', trans('admin/hardware/message.does_not_exist'));
+        return redirect()->route('inventories.index')->with('error', trans('admin/inventory/message.does_not_exist'));
     }
 
     public function quickScan()
@@ -734,28 +734,28 @@ class InventoriesController extends Controller
         $this->authorize('audit', Inventory::class);
         $settings = Setting::getSettings();
         $dt = Carbon::now()->addMonths($settings->audit_interval)->toDateString();
-        return view('hardware/inventory/quickscan')->with('next_audit_date', $dt);
+        return view('inventory/quickscan')->with('next_audit_date', $dt);
     }
 
     public function quickScanCheckin()
     {
         $this->authorize('checkin', Inventory::class);
 
-        return view('hardware/inventory/quickscan-checkin')->with('statusLabel_list', Helper::statusLabelList());
+        return view('inventory/quickscan-checkin')->with('statusLabel_list', Helper::statusLabelList());
     }
 
     public function dueForAudit()
     {
         $this->authorize('audit', Inventory::class);
 
-        return view('hardware/inventory/audit-due');
+        return view('inventory/audit-due');
     }
 
     public function dueForCheckin()
     {
         $this->authorize('checkin', Inventory::class);
 
-        return view('hardware/inventory/checkin-due');
+        return view('inventory/checkin-due');
     }
 
     public function audit(Inventory $inventory): View | RedirectResponse
@@ -770,7 +770,7 @@ class InventoriesController extends Controller
         }
 
         $dt = Carbon::now()->addMonths( (int) $settings->audit_interval)->toDateString();
-        return view('hardware/inventory/audit')->with('inventory', $inventory)->with('item', $inventory)->with('next_audit_date', $dt)->with('locations_list');
+        return view('inventory/audit')->with('inventory', $inventory)->with('item', $inventory)->with('next_audit_date', $dt)->with('locations_list');
     }
 
     public function auditStore(UploadFileRequest $request, Inventory $inventory)
@@ -826,7 +826,7 @@ class InventoriesController extends Controller
             }
 
             $inventory->logAudit($request->input('note'), $request->input('location_id'), $file_name, $originalValues);
-            return Helper::getRedirectOption($request, $inventory->id, 'Inventories')->with('success', trans('admin/hardware/message.audit.success'));
+            return Helper::getRedirectOption($request, $inventory->id, 'Inventories')->with('success', trans('admin/inventory/message.audit.success'));
         }
 
         return redirect()->back()->withInput()->withErrors($inventory->getErrors());
@@ -843,6 +843,6 @@ class InventoriesController extends Controller
 
         $requestedItems = $requestedItems->orderBy('created_at', 'desc')->get();
 
-        return view('hardware/inventory/requested', compact('requestedItems'));
+        return view('inventory/requested', compact('requestedItems'));
     }
 }

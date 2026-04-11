@@ -44,7 +44,7 @@ class InventoryAuditPresenter extends Presenter
                 'sortable' => true,
                 'title' => trans('admin/hardware/form.name'),
                 'visible' => true,
-                'formatter' => 'inventoryLinkFormatter',
+                'formatter' => 'inventoriesLinkFormatter',
             ], [
                 'field' => 'file',
                 'searchable' => false,
@@ -59,14 +59,14 @@ class InventoryAuditPresenter extends Presenter
                 'sortable' => true,
                 'title' => trans('admin/hardware/table.asset_tag'),
                 'visible' => true,
-                'formatter' => 'inventoryLinkFormatter',
+                'formatter' => 'inventoriesLinkFormatter',
             ], [
                 'field' => 'serial',
                 'searchable' => true,
                 'sortable' => true,
                 'title' => trans('admin/hardware/form.serial'),
                 'visible' => true,
-                'formatter' => 'inventoryLinkFormatter',
+                'formatter' => 'inventoriesLinkFormatter',
             ],  [
                 'field' => 'model',
                 'searchable' => true,

@@ -1305,6 +1305,7 @@
         'fieldsets',
         'groups',
         'hardware',
+        'inventories',
         'kits',
         'licenses',
         'locations',
