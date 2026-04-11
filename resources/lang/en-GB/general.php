@@ -53,6 +53,7 @@ return [
     'inventory_location_update_default' => 'Update Default Inventory Location Only',
     'inventory_location_update_actual' => 'Update Actual Inventory Location Only',
       'inventory_tag'=>'Tag No',
+      'select_donor'=>'Select Donor',
     'assets_audited'        => 'assets audited',
     'assets_checked_in_count'     => 'assets checked in',
     'assets_checked_out_count'     => 'assets checked out',

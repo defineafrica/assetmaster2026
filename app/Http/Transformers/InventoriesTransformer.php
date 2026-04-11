@@ -230,4 +230,59 @@ class InventoriesTransformer
 
         return $array;
     }
+
+    public function transformRequestedInventories($inventories, $total)
+    {
+        $array = [];
+        foreach ($inventories as $inventory) {
+            $array[] = self::transformRequestedInventory($inventory);
+        }
+
+        return (new DatatablesTransformer)->transformDatatables($array, $total);
+    }
+
+    public function transformRequestedInventory(Inventory $inventory)
+    {
+        $array = [
+            'id' => (int)$inventory->id,
+            'name' => e($inventory->name),
+            'inventory_tag' => e($inventory->inventory_tag),
+            'serial' => e($inventory->serial),
+            'image' => ($inventory->getImageUrl()) ? $inventory->getImageUrl() : null,
+            'model' => ($inventory->model) ? e($inventory->model->name) : null,
+            'model_number' => (($inventory->model) && ($inventory->model->model_number)) ? e($inventory->model->model_number) : null,
+            'expected_checkin' => Helper::getFormattedDateObject($inventory->expected_checkin, 'date'),
+            'location' => ($inventory->location) ? e($inventory->location->name) : null,
+            'status' => ($inventory->assetstatus) ? $inventory->present()->statusMeta : null,
+            'assigned_to_self' => ($inventory->assigned_to == auth()->id()),
+        ];
+
+        if (($inventory->model) && ($inventory->model->fieldset) && ($inventory->model->fieldset->fields->count() > 0)) {
+            $fields_array = [];
+
+            foreach ($inventory->model->fieldset->fields as $field) {
+                if (($field->field_encrypted == '0') && ($field->show_in_requestable_list == '1')) {
+                    $value = $inventory->{$field->db_column};
+                    if (($field->format == 'DATE') && (!is_null($value)) && ($value != '')) {
+                        $value = Helper::getFormattedDateObject($value, 'date', false);
+                    }
+
+                    $fields_array[$field->db_column] = e($value);
+                }
+
+                $array['custom_fields'] = $fields_array;
+            }
+        } else {
+            $array['custom_fields'] = new \stdClass;
+        }
+
+        $permissions_array['available_actions'] = [
+            'cancel' => ($inventory->isRequestedBy(auth()->user())) ? true : false,
+            'request' => ($inventory->isRequestedBy(auth()->user())) ? false : true,
+        ];
+
+        $array += $permissions_array;
+
+        return $array;
+    }
 }

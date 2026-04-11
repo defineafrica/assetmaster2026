@@ -288,6 +288,7 @@ return [
     'select_var'            => 'Select :thing... ', // this will eventually replace all of our other selects
     'select'				=> 'Select',
     'select_all'            => 'Select All',
+    'select_donor'=>'Select Donor',
     'search'				=> 'Search',
     'select_category'       => 'Select a Category',
     'select_datasource' => 'Select a data source',

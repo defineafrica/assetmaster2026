@@ -105,9 +105,6 @@
         </a>
     </div><!-- ./col -->
 
-</div>
-
-<div class="row">
 
     <div class="col-lg-4 col-xs-12">
     <!-- small consumables box -->
@@ -147,7 +144,7 @@
         </a>
     </div><!-- ./col -->
 
-    <div class="col-lg-4 col-xs-12">
+    {{-- <div class="col-lg-4 col-xs-12">
         <!-- small users box -->
         <a href="{{ route('users.index') }}">
             <div class="dashboard small-box" style="background-color: #ffffff; border: 2px solid #17a2b8; border-radius: 8px;">
@@ -164,7 +161,7 @@
                 </span>
             </div>
         </a>
-    </div><!-- ./col -->
+    </div><!-- ./col --> --}}
 
 </div>
 </div>

@@ -60,6 +60,8 @@ return [
     'inventory_location_update_default_current' => 'Update Inventory Location Only',
     'inventory_location_update_default' => 'Update Default Inventory Location Only',
     'inventory_location_update_actual' => 'Update Actual Inventory Location Only',
+      'inventory_tag'=>'Tag No',
+      'select_donor'=>'Select Donor',
     'avatar_upload'         => 'Unggah Avatar',
     'back'      			=> 'Kembali',
     'bad_data'      		=> 'Tidak ada yang ditemukan. Mungkinkah data buruk?',
