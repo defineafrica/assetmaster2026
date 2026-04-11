@@ -19,6 +19,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use \Illuminate\Contracts\View\View;
 use Exception;
+use Illuminate\Support\Facades\Log;
 
 /**
  * This controller handles all actions related to the ability for users
@@ -259,6 +260,84 @@ class ViewAssetsController extends Controller
         try {
             CancelCheckoutRequestAction::run($asset, auth()->user());
             return redirect()->route('requestable-assets')->with('success')->with('success', trans('admin/hardware/message.requests.canceled'));
+        } catch (Exception $e) {
+            report($e);
+            return redirect()->back()->with('error', trans('general.something_went_wrong'));
+        }
+    }
+
+    /**
+     * Process a specific requested inventory
+     */
+    public function storeInventory(Inventory $inventory): RedirectResponse
+    {
+        try {
+            if (! $inventory->availableForCheckout()) {
+                return redirect()->back()->with('error', trans('Inventory is not requestable'));
+            }
+
+            $user = auth()->user();
+
+            $logaction = new Actionlog();
+            $logaction->item_id = $inventory->id;
+            $logaction->item_type = Inventory::class;
+            $logaction->created_at = date('Y-m-d H:i:s');
+            $logaction->target_id = auth()->id();
+            $logaction->target_type = User::class;
+            $logaction->location_id = $user->location_id ?? null;
+            $logaction->logaction('requested');
+
+            $inventory->request();
+            $inventory->increment('requests_counter', 1);
+
+            $settings = Setting::getSettings();
+            $data['item'] = $inventory;
+            $data['target'] = $user;
+            $data['item_quantity'] = 1;
+            $data['item_url'] = route('inventories.show', $inventory->id);
+
+            try {
+                $settings->notify(new RequestAssetNotification($data));
+            } catch (\Exception $e) {
+                Log::warning($e);
+            }
+
+            return redirect()->route('requestable-assets')->with('success', trans('admin/hardware/message.requests.success'));
+        } catch (Exception $e) {
+            report($e);
+            return redirect()->back()->with('error', trans('general.something_went_wrong'));
+        }
+    }
+
+    public function destroyInventory(Inventory $inventory): RedirectResponse
+    {
+        try {
+            $user = auth()->user();
+
+            $logaction = new Actionlog();
+            $logaction->item_id = $inventory->id;
+            $logaction->item_type = Inventory::class;
+            $logaction->created_at = date('Y-m-d H:i:s');
+            $logaction->target_id = auth()->id();
+            $logaction->target_type = User::class;
+            $logaction->location_id = $user->location_id ?? null;
+            $logaction->logaction(ActionType::RequestCanceled);
+
+            $inventory->cancelRequest();
+
+            $settings = Setting::getSettings();
+            $data['item'] = $inventory;
+            $data['target'] = $user;
+            $data['item_quantity'] = 1;
+            $data['item_url'] = route('inventories.show', $inventory->id);
+
+            try {
+                $settings->notify(new RequestAssetCancelation($data));
+            } catch (\Exception $e) {
+                Log::warning($e);
+            }
+
+            return redirect()->route('requestable-assets')->with('success', trans('admin/hardware/message.requests.canceled'));
         } catch (Exception $e) {
             report($e);
             return redirect()->back()->with('error', trans('general.something_went_wrong'));
